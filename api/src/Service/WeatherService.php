@@ -44,6 +44,12 @@ class WeatherService
                 throw new \Exception('Erro na requisição: '.$errorMessage. ' Status Code: '.$statusCode);
             }
 
+            $responseContent = $response->toArray();
+
+            $hourlyResponse = $responseContent['hourly'];
+            $time = $hourlyResponse['time'];
+            $temperature = $hourlyResponse[$hourly];
+
             return $response->toArray();
         } catch(\Throwable $e) {
             $this->logger->error('Error in WeatherService::getWeather(): '.$e->getMessage(), [
