@@ -15,13 +15,23 @@ class WeatherService
                                 private LoggerInterface     $logger)
     {}
 
+    /** Recebe os dados do WeatherController para a consulta na API Open Meteo
+     * 
+     * @param float $latitude - Contém a latitude do local
+     * @param float $longitude - Contém a latitude do local
+     * @param string $hourly - Contém a lista de parâmetros para a consulta na API Open Meteo
+     * @param string $timezone - Contém o timezone do local
+     * 
+     * @return Array - Retorna um JSON com os dados da consulta
+     */
     public function getWeather(float $latitude, float $longitude, string $hourly, string $timezone): array
     {
         try {
+            $hourlyParams = explode(',', $hourly);
             $params = [
                 'latitude' => $latitude,
                 'longitude' => $longitude,
-                'hourly' => $hourly,
+                'hourly' => $hourlyParams,
                 'timezone' => $timezone
             ];
             $urlApi = $this->baseUrlApi . '/forecast?' . http_build_query($params);
@@ -43,12 +53,6 @@ class WeatherService
 
                 throw new \Exception('Erro na requisição: '.$errorMessage. ' Status Code: '.$statusCode);
             }
-
-            $responseContent = $response->toArray();
-
-            $hourlyResponse = $responseContent['hourly'];
-            $time = $hourlyResponse['time'];
-            $temperature = $hourlyResponse[$hourly];
 
             return $response->toArray();
         } catch(\Throwable $e) {

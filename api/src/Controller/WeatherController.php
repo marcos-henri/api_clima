@@ -14,6 +14,19 @@ class WeatherController extends AbstractController
     public function __construct(private WeatherService $weather_service)
     {}
 
+    /** Controla a requisição de clima
+     * 
+     * @param Request $request - Recebe os parâmetros para a consulta na API Open Meteo
+     * 
+     * @var $latitude - Contém a latitude do local
+     * @var $longitude - Contém a latitude do local
+     * @var $hourly - Contém a lista de parâmetros para a consulta na API Open Meteo
+     * @var $timezone - Contém o timezone do local
+     * 
+     * @var $weather - Recebe o conteúdo da consulta
+     * 
+     * @return Response - Retorna um JSON com os dados da consulta
+     */
     #[Route('/get-weather', name: 'get-weather', methods: ['GET'])]
     public function getWeather(Request $request): Response
     {
